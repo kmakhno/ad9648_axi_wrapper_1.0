@@ -24,6 +24,7 @@
     	output ac_dc_coupling_o,
 		output [31:0] packet_size_o,
 		output [31:0] num_packets_o,
+		input wire record_complete_i,
 		// User ports ends
 		// Do not modify the ports beyond this line
 
@@ -242,7 +243,7 @@
 	      slv_reg4 <= 0;
 	      slv_reg5 <= 0;
 	      slv_reg6 <= 0;
-	      slv_reg7 <= 0;
+	    //   slv_reg7 <= 0;
 	    //   slv_reg8 <= 0;
 	    //   slv_reg9 <= 0;
 		slv_reg10  <= 0;
@@ -300,13 +301,13 @@
 	                // Slave register 6
 	                slv_reg6[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          4'h7:
-	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
-	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
-	                // Respective byte enables are asserted as per write strobes 
-	                // Slave register 7
-	                slv_reg7[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
-	              end  
+	        //   4'h7:
+	        //     for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	        //       if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	        //         // Respective byte enables are asserted as per write strobes 
+	        //         // Slave register 7
+	        //         slv_reg7[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	        //       end  
 	        //   4'h8:
 	        //     for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	        //       if ( S_AXI_WSTRB[byte_index] == 1 ) begin
@@ -336,7 +337,7 @@
 	                      slv_reg4 <= slv_reg4;
 	                      slv_reg5 <= slv_reg5;
 	                      slv_reg6 <= slv_reg6;
-	                      slv_reg7 <= slv_reg7;
+	                    //   slv_reg7 <= slv_reg7;
 	                    //   slv_reg8 <= slv_reg8;
 	                    //   slv_reg9 <= slv_reg9;
 						  slv_reg10 <= slv_reg10;
@@ -514,6 +515,13 @@
 			slv_reg8 <= 0;
 		else if (spi_transfer_done_i)
 			slv_reg8 <= spi_rx_data_i;
+	end
+
+	always @(posedge S_AXI_ACLK) begin
+		if ( S_AXI_ARESETN == 1'b0 )
+			slv_reg7 <= 0;
+		else
+			slv_reg7 <= record_complete_i;
 	end
 	
 	assign spi_start_transfer_d = (front_det_q == 2'b01);

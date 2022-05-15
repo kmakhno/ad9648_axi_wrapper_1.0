@@ -72,6 +72,7 @@
 	wire [31:0] interleaved_data_d = adc_chAB_data_i;//{{{2{adc_CH2_data_i[13]}}, adc_CH2_data_i}, {{2{adc_CH1_data_i[13]}}, adc_CH1_data_i}};
 	wire adc_valid_d = ~adc_valid_ni;//~adc_valid_CH1_ni && ~adc_valid_CH2_ni;
 	wire adc_ready_d;
+	wire record_complete_d;
 
 // Instantiation of Axi Bus Interface S0_AXI
 	ad9648_axi_wrapper_v1_0_S0_AXI # ( 
@@ -108,7 +109,8 @@
     	.start_adc_o(start_adc_o),
     	.ac_dc_coupling_o(ac_dc_coupling_o),
 		.packet_size_o(packet_size_d),
-		.num_packets_o(num_packets_d)
+		.num_packets_o(num_packets_d),
+		.record_complete_i(record_complete_d)
 	);
 
 // Instantiation of Axi Bus Interface M0_AXIS
@@ -127,7 +129,8 @@
 		.data_i(interleaved_data_d),
 		.valid_i(adc_valid_d),
 		.ready_o(adc_ready_d),
-		.start_adc_i(start_adc_o)
+		.start_adc_i(start_adc_o),
+		.record_complete_o(record_complete_d)
 	);
 
 	// Add user logic here

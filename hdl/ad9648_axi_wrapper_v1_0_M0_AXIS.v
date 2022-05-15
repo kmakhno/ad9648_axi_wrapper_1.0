@@ -19,6 +19,7 @@
 		input valid_i,
 		output ready_o,
 		input start_adc_i,
+		output wire record_complete_o,
 		// User ports ends
 		// Do not modify the ports beyond this line
 
@@ -99,6 +100,7 @@
 	assign ready_o       = M_AXIS_TREADY;
 	assign M_AXIS_TLAST  = (packet_size_q == packet_size_d-1);
 	assign start_adc_d   = (front_det == 2'b01);
+	assign record_complete_o = data_transfer_done_q;
 	// User logic ends
 
 	endmodule
