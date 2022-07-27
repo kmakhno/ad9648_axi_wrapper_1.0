@@ -15,7 +15,8 @@
 		parameter integer C_S0_AXI_ADDR_WIDTH	= 6,
 
 		// Parameters of Axi Master Bus Interface M0_AXIS
-		parameter integer C_M0_AXIS_TDATA_WIDTH	= 32
+		parameter integer C_M0_AXIS_TDATA_WIDTH	= 32,
+		parameter integer FIFO_WIDTH = 16
 	)
 	(
 		// Users to add ports here
@@ -115,7 +116,8 @@
 
 // Instantiation of Axi Bus Interface M0_AXIS
 	ad9648_axi_wrapper_v1_0_M0_AXIS # ( 
-		.C_M_AXIS_TDATA_WIDTH(C_M0_AXIS_TDATA_WIDTH)
+		.C_M_AXIS_TDATA_WIDTH(C_M0_AXIS_TDATA_WIDTH),
+		.FIFO_WIDTH(FIFO_WIDTH)
 	) ad9648_axi_wrapper_v1_0_M0_AXIS_inst (
 		.M_AXIS_ACLK(m0_axis_aclk),
 		.M_AXIS_ARESETN(m0_axis_aresetn),
